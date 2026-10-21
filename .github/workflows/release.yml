@@ -1,0 +1,40 @@
+name: Release
+
+# 上架到 Xime 布局中心（ximeiorg/xime-index，LAYOUT_SPEC.md）：
+#   布局的下载地址必须不可变，推荐用 GitHub Release 附件。
+#   发布方式：git tag 1.0.0 && git push origin 1.0.0
+#   附件地址即
+#     https://github.com/<owner>/<repo>/releases/download/1.0.0/xime.custom.yaml
+#   其 sha256 可在 Release 页面附件的 digest 处读到（与索引里填的值必须一致）。
+on:
+  push:
+    tags: ["*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate SHA256 checksum
+        run: sha256sum xime.custom.yaml > xime.custom.yaml.sha256
+
+      - name: Ensure release exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${{ github.ref_name }}"
+          gh release view "$tag" >/dev/null 2>&1 || \
+            gh release create "$tag" --title "$tag" --generate-notes --verify-tag
+
+      - name: Upload assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.ref_name }}" \
+            xime.custom.yaml \
+            xime.custom.yaml.sha256 \
+            --clobber
