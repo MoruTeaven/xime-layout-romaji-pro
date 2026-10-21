@@ -110,9 +110,9 @@ keyboard:
         tap: { label: "全/半", action: "toggle_ascii", bubble: false },
         long_press: { label: "语言", action: "command", value: "show_ime_picker", bubble: false }
       }
-      # 数字入口：点按切数字面板，长按弹出「数字 / 常用符号」。
+      # 数字入口：点按直接进数字面板，长按弹出「数字 / 常用符号」。
       mode_change: {
-        tap: { action: "command", value: "mode_change", bubble: false },
+        tap: { action: "command", value: "mode_change_number", bubble: false },
         long_press: { display: "bubble", values: [
           { label: "number", action: "command", value: "mode_change_number" },
           { label: "common_symbol", action: "command", value: "mode_change_common_symbol" }
