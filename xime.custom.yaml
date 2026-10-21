@@ -45,7 +45,7 @@ keyboard:
         - [q, w, e, r, t, y, u, i, o, p]
         - [a, s, d, f, g, h, j, k, l, "-"]
         - [shift, z, x, c, v, b, n, m, delete]
-        - [mode_change, symbol, comma, space, period, half_full, enter]
+        - [mode_change, fu, comma, space, period, half_full, enter]
     keys:
       # ── 第 1 行 数字行：点按数字，长按「上标 / 下标」二选一 ──
       "1": { tap: "1", long_press: { display: "bubble", values: ["¹", "₁"] } }
@@ -105,7 +105,9 @@ keyboard:
         ] }
       }
       # 符：点赶往常用符号面板。
-      symbol: { width: 1, tap: { label: "符", action: "command", value: "symbol", bubble: false } }
+      # 注意不能用内置 id「symbol」——它是功能键，渲染层强制画键盘图标，
+      # 会忽略 label；改用自定义 id 才能让键面显示「符」二字。
+      fu: { width: 1, tap: { label: "符", action: "command", value: "symbol", bubble: false } }
       # 逗号（ASCII 半角逗号，非顿号）：点按「，」，长按「！」。
       comma: {
         width: 0.8,
@@ -139,7 +141,7 @@ keyboard:
         - [q, w, e, r, t, y, u, i, o, p]
         - [a, s, d, f, g, h, j, k, l, "-"]
         - [shift, z, x, c, v, b, n, m, delete]
-        - [mode_change, symbol, comma, space, period, half_full, enter]
+        - [mode_change, fu, comma, space, period, half_full, enter]
     keys:
       # ── 第 1 行 数字行：点按数字，长按「上标 / 下标」二选一 ──
       "1": { tap: "1", long_press: { display: "bubble", values: ["¹", "₁"] } }
@@ -195,7 +197,8 @@ keyboard:
           { label: "common_symbol", action: "command", value: "mode_change_common_symbol" }
         ] }
       }
-      symbol: { width: 1, tap: { label: "符", action: "command", value: "symbol", bubble: false } }
+      # 同 qwerty 段：不能用内置 id「symbol」，否则键面被强制渲染成键盘图标。
+      fu: { width: 1, tap: { label: "符", action: "command", value: "symbol", bubble: false } }
       comma: {
         width: 0.8,
         tap: { label: ",", value: ",", action: "commit" },

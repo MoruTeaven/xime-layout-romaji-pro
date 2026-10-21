@@ -122,6 +122,10 @@
   第一项是左滑、第二项是右滑。
 - **单个动作不弹气泡**：`long_press: { label: "撤销", action: "undo", bubble: false }`，
   长按立即执行，适合功能键。
+- **注意内置功能键 id**：`symbol` / `emoji` / `voice` 是内置功能键，渲染层对它们有
+  特殊绘制（键盘图标、麦克风图标等），会忽略 `label`。想让键面显示自定义文字，
+  就用一个自定义 id（本配置的「符」键用的是 `fu`），只在 `tap.action` 里
+  引用官方命令 `symbol` 即可。
 
 完整的字段说明见官方文档：[键盘配置自定义（新版）](https://ime.ximei.me/features/keyboard-config-v2)
 
