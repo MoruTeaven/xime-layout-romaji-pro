@@ -1,14 +1,19 @@
 # ── 日语罗马音键盘布局 Pro 版（Xime / xime.custom.yaml）──
 #
-# 标准 QWERTY 26 个字母键 + 1 个长音键（-）。
+# 标准 QWERTY 26 个字母键 + 1 个长音键（-）+ 顶部 0-9 数字行。
 # 键面不放假名助记，保持罗马音键盘本来的样子。
 #
-# Pro 版在普通版基础上新增：
-#   1. 顶部 0-9 数字行：点按数字，上滑上标，下滑下标，长按 emoji 数字
-#   2. 字母键：长按大写，上滑常用符号 / 编辑功能
-#      q=Tab  a=全选  y=恢复  z=撤销  x=剪切  c=复制  v=粘贴，其余上滑符号
-#   3. "-" 上滑下划线
-#   4. 最下一排：数字 · 符号 | ，(！) 空格(语音) 。(？) 全/半(切语言) enter
+# 手势约定（只用「点按 + 长按」，不使用上下滑）：
+#   字母键   点按 = 罗马音（进 Rime 组合）
+#            长按 = 一个常用符号，或一个编辑功能
+#   数字键   点按 = 数字，长按 = 弹出「上标 / 下标」二选一
+#   长音键 - 点按 = 进 Rime（由方案决定转成 ー 还是别的），长按 = 下划线
+#   大小写   交给 Shift，不占字母键长按
+#
+# 全角 / 半角：
+#   qwerty 段（中文态）写全角字形，qwerty_en 段（英文态）写半角字形。
+#   「全/半」键走 toggle_ascii 切换中英态，符号随之自动换成对应字形，
+#   无需在单个按键上做条件判断。
 #
 # 导入方式：Xime → 输入方案 → 已导入 → 右上角 + → 浏览器导入 → 上传本文件 → 部署。
 # 本文件只写「与内置默认不同的部分」，删除任意一段即可回退到内置行为。
@@ -22,7 +27,7 @@ metadata:
 
 keyboard:
   # ══════════════════════════════════════════════════════════
-  # 中文键盘段（qwerty）
+  # 中文键盘段（qwerty）—— 全角字形
   #
   # Xime 按方案加载键盘段：未声明 schemas 绑定的方案一律使用 qwerty，
   # 罗马音布局写在这里即可生效；切到英文后走 qwerty_en，下面同样配了一份。
@@ -32,9 +37,9 @@ keyboard:
     button_layout: standard
     layout:
       # ── 键位：5 行。
-      #    第 1 行 0-9 数字行（Pro 新增）；
+      #    第 1 行 0-9 数字行；
       #    第 2-4 行 26 个字母键保持标准 QWERTY 位置，l 右侧追加长音键 "-"；
-      #    第 5 行功能键：数字 · 符号 | ，(！) 空格(语音) 。(？) 全/半(切语言) enter
+      #    第 5 行功能键：123 · 符 | ，(！) 空格(语音) 。(？) 全/半(方案) enter
       rows:
         - ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
         - [q, w, e, r, t, y, u, i, o, p]
@@ -42,75 +47,55 @@ keyboard:
         - [shift, z, x, c, v, b, n, m, delete]
         - [mode_change, symbol, comma, space, period, half_full, enter]
     keys:
-      # ── 第 1 行 数字行：点按数字，上滑上标，下滑下标，长按 emoji 数字 ──
-      "1": { tap: "1", swipe_up: "¹", swipe_down: "₁", long_press: { label: "1️⃣", action: "commit", value: "1️⃣", bubble: false } }
-      "2": { tap: "2", swipe_up: "²", swipe_down: "₂", long_press: { label: "2️⃣", action: "commit", value: "2️⃣", bubble: false } }
-      "3": { tap: "3", swipe_up: "³", swipe_down: "₃", long_press: { label: "3️⃣", action: "commit", value: "3️⃣", bubble: false } }
-      "4": { tap: "4", swipe_up: "⁴", swipe_down: "₄", long_press: { label: "4️⃣", action: "commit", value: "4️⃣", bubble: false } }
-      "5": { tap: "5", swipe_up: "⁵", swipe_down: "₅", long_press: { label: "5️⃣", action: "commit", value: "5️⃣", bubble: false } }
-      "6": { tap: "6", swipe_up: "⁶", swipe_down: "₆", long_press: { label: "6️⃣", action: "commit", value: "6️⃣", bubble: false } }
-      "7": { tap: "7", swipe_up: "⁷", swipe_down: "₇", long_press: { label: "7️⃣", action: "commit", value: "7️⃣", bubble: false } }
-      "8": { tap: "8", swipe_up: "⁸", swipe_down: "₈", long_press: { label: "8️⃣", action: "commit", value: "8️⃣", bubble: false } }
-      "9": { tap: "9", swipe_up: "⁹", swipe_down: "₉", long_press: { label: "9️⃣", action: "commit", value: "9️⃣", bubble: false } }
-      "0": { tap: "0", swipe_up: "⁰", swipe_down: "₀", long_press: { label: "0️⃣", action: "commit", value: "0️⃣", bubble: false } }
+      # ── 第 1 行 数字行：点按数字，长按「上标 / 下标」二选一 ──
+      "1": { tap: "1", long_press: { display: "bubble", values: ["¹", "₁"] } }
+      "2": { tap: "2", long_press: { display: "bubble", values: ["²", "₂"] } }
+      "3": { tap: "3", long_press: { display: "bubble", values: ["³", "₃"] } }
+      "4": { tap: "4", long_press: { display: "bubble", values: ["⁴", "₄"] } }
+      "5": { tap: "5", long_press: { display: "bubble", values: ["⁵", "₅"] } }
+      "6": { tap: "6", long_press: { display: "bubble", values: ["⁶", "₆"] } }
+      "7": { tap: "7", long_press: { display: "bubble", values: ["⁷", "₇"] } }
+      "8": { tap: "8", long_press: { display: "bubble", values: ["⁸", "₈"] } }
+      "9": { tap: "9", long_press: { display: "bubble", values: ["⁹", "₉"] } }
+      "0": { tap: "0", long_press: { display: "bubble", values: ["⁰", "₀"] } }
 
-      # ── 第 2 行：点按罗马字，上滑常用符号 / 功能，长按大写 ──
-      q: { tap: "q", swipe_up: { label: "Tab", action: "tab", display: "key", bubble: false }, long_press: { label: "Q", action: "commit", value: "Q", bubble: false } }
-      w: { tap: "w", swipe_up: "？", long_press: { label: "W", action: "commit", value: "W", bubble: false } }
-      e: { tap: "e", swipe_up: "！", long_press: { label: "E", action: "commit", value: "E", bubble: false } }
-      r: { tap: "r", swipe_up: "：", long_press: { label: "R", action: "commit", value: "R", bubble: false } }
-      t: { tap: "t", swipe_up: "；", long_press: { label: "T", action: "commit", value: "T", bubble: false } }
-      y: { tap: "y", swipe_up: { label: "恢复", action: "undo", display: "key", bubble: false }, long_press: { label: "Y", action: "commit", value: "Y", bubble: false } }
-      u: { tap: "u", swipe_up: "「", long_press: { label: "U", action: "commit", value: "U", bubble: false } }
-      i: { tap: "i", swipe_up: "」", long_press: { label: "I", action: "commit", value: "I", bubble: false } }
-      o: { tap: "o", swipe_up: "（", long_press: { label: "O", action: "commit", value: "O", bubble: false } }
-      p: { tap: "p", swipe_up: "）", long_press: { label: "P", action: "commit", value: "P", bubble: false } }
+      # ── 第 2 行：点按罗马音，长按符号 / 功能 ──
+      q: { tap: "q", long_press: { label: "Tab", action: "tab", bubble: false } }
+      w: { tap: "w", long_press: { label: "～", action: "commit", value: "～", bubble: false } }
+      e: { tap: "e", long_press: { label: "・", action: "commit", value: "・", bubble: false } }
+      r: { tap: "r", long_press: { display: "bubble", values: ["￥", "＄"] } }
+      t: { tap: "t", long_press: { label: "％", action: "commit", value: "％", bubble: false } }
+      y: { tap: "y", long_press: { label: "恢复", action: "undo", bubble: false } }
+      u: { tap: "u", long_press: { label: "＆", action: "commit", value: "＆", bubble: false } }
+      i: { tap: "i", long_press: { label: "＊", action: "commit", value: "＊", bubble: false } }
+      o: { tap: "o", long_press: { label: "（", action: "commit", value: "（", bubble: false } }
+      p: { tap: "p", long_press: { label: "）", action: "commit", value: "）", bubble: false } }
 
-      # ── 第 3 行：点按罗马字，上滑常用符号 / 功能，长按大写 ──
-      a: { tap: "a", swipe_up: { label: "全选", action: "select_all", display: "key", bubble: false }, long_press: { label: "A", action: "commit", value: "A", bubble: false } }
-      s: { tap: "s", swipe_up: "〜", long_press: { label: "S", action: "commit", value: "S", bubble: false } }
-      d: { tap: "d", swipe_up: "・", long_press: { label: "D", action: "commit", value: "D", bubble: false } }
-      f: { tap: "f", swipe_up: "＠", long_press: { label: "F", action: "commit", value: "F", bubble: false } }
-      g: { tap: "g", swipe_up: "＃", long_press: { label: "G", action: "commit", value: "G", bubble: false } }
-      h: { tap: "h", swipe_up: "％", long_press: { label: "H", action: "commit", value: "H", bubble: false } }
-      j: { tap: "j", swipe_up: "＝", long_press: { label: "J", action: "commit", value: "J", bubble: false } }
-      k: { tap: "k", swipe_up: "＋", long_press: { label: "K", action: "commit", value: "K", bubble: false } }
-      l: { tap: "l", swipe_up: "￥", long_press: { label: "L", action: "commit", value: "L", bubble: false } }
-      # 长音键：tap 的 action 写 send_rime，点按走按键路由进 rime，
-      # 由方案自己的规则决定把 "-" 变成什么（长音符 ー 或别的）。
-      # 上滑下划线；长按保留内置默认气泡（- / ー / ― / －）。
-      "-": { tap: { label: "-", action: "send_rime", value: "-" }, swipe_up: "＿", long_press: { display: "bubble", values: ["-", "ー", "―", "－"] } }
+      # ── 第 3 行：点按罗马音，长按符号 / 功能 ──
+      a: { tap: "a", long_press: { label: "全选", action: "select_all", bubble: false } }
+      s: { tap: "s", long_press: { label: "＠", action: "commit", value: "＠", bubble: false } }
+      d: { tap: "d", long_press: { label: "：", action: "commit", value: "：", bubble: false } }
+      f: { tap: "f", long_press: { label: "；", action: "commit", value: "；", bubble: false } }
+      g: { tap: "g", long_press: { label: "【", action: "commit", value: "【", bubble: false } }
+      h: { tap: "h", long_press: { label: "】", action: "commit", value: "】", bubble: false } }
+      j: { tap: "j", long_press: { label: "＋", action: "commit", value: "＋", bubble: false } }
+      k: { tap: "k", long_press: { label: "＝", action: "commit", value: "＝", bubble: false } }
+      l: { tap: "l", long_press: { label: "＃", action: "commit", value: "＃", bubble: false } }
+      # 长音键：tap 走 send_rime 进 Rime，由方案自己的规则决定 "-" 变成什么
+      # （长音符 ー 或别的）；长按直接输出下划线。
+      "-": { tap: { label: "-", action: "send_rime", value: "-" }, long_press: { label: "＿", action: "commit", value: "＿", bubble: false } }
 
-      # ── 第 4 行：点按罗马字，上滑常用符号 / 功能，长按大写 ──
-      z: { tap: "z", swipe_up: { label: "撤销", action: "undo", display: "key", bubble: false }, long_press: { label: "Z", action: "commit", value: "Z", bubble: false } }
-      x: { tap: "x", swipe_up: { label: "剪切", action: "cut", display: "key", bubble: false }, long_press: { label: "X", action: "commit", value: "X", bubble: false } }
-      c: { tap: "c", swipe_up: { label: "复制", action: "copy", display: "key", bubble: false }, long_press: { label: "C", action: "commit", value: "C", bubble: false } }
-      v: { tap: "v", swipe_up: { label: "粘贴", action: "paste", display: "key", bubble: false }, long_press: { label: "V", action: "commit", value: "V", bubble: false } }
-      b: { tap: "b", swipe_up: "＊", long_press: { label: "B", action: "commit", value: "B", bubble: false } }
-      n: { tap: "n", swipe_up: "＆", long_press: { label: "N", action: "commit", value: "N", bubble: false } }
-      m: { tap: "m", swipe_up: "…", long_press: { label: "M", action: "commit", value: "M", bubble: false } }
+      # ── 第 4 行：点按罗马音，长按符号 / 功能 ──
+      z: { tap: "z", long_press: { label: "撤销", action: "undo", bubble: false } }
+      x: { tap: "x", long_press: { label: "剪切", action: "cut", bubble: false } }
+      c: { tap: "c", long_press: { label: "复制", action: "copy", bubble: false } }
+      v: { tap: "v", long_press: { label: "粘贴", action: "paste", bubble: false } }
+      b: { tap: "b", long_press: { label: "／", action: "commit", value: "／", bubble: false } }
+      n: { tap: "n", long_press: { label: "＼", action: "commit", value: "＼", bubble: false } }
+      m: { tap: "m", long_press: { label: "……", action: "commit", value: "……", bubble: false } }
 
-      # 逗号键：点按「、」，上滑「。」，长按「！」。
-      comma: {
-        tap: { label: "、", value: "、", action: "commit" },
-        swipe_up: { label: "。", value: "。", action: "commit" },
-        long_press: { label: "！", action: "commit", value: "！", bubble: false }
-      }
-      # 句号键（Pro 新增，与逗号分列空格两侧）：点按「。」，长按「？」。
-      # period 不是功能键，宽度需显式写 0.8 才能与 comma 对称。
-      period: {
-        width: 0.8,
-        tap: { label: "。", value: "。", action: "commit" },
-        long_press: { label: "？", action: "commit", value: "？", bubble: false }
-      }
-      # 空格键：点按空格，长按语音输入；宽度从内置 3 缩到 2.5 让出两侧标点键。
-      space: { width: 2.5, tap: { action: "space", bubble: false }, long_press: { label: "语音", action: "voice", bubble: false } }
-      # 全/半键：点按中英切换（标点随之全角 ↔ 半角），长按切换语言（选择输入法）。
-      half_full: {
-        tap: { label: "全/半", action: "toggle_ascii", bubble: false },
-        long_press: { label: "语言", action: "command", value: "show_ime_picker", bubble: false }
-      }
-      # 数字入口：点按直接进数字面板（键面显示 123），长按弹出「数字 / 常用符号」。
+      # ── 第 5 行 功能键 ──
+      # 123：点按直接进数字面板，长按「数字 / 常用符号」二选一。
       mode_change: {
         width: 1.2,
         tap: { label: "123", action: "command", value: "mode_change_number", bubble: false },
@@ -119,12 +104,32 @@ keyboard:
           { label: "common_symbol", action: "command", value: "mode_change_common_symbol" }
         ] }
       }
-      # 符号入口：点赶往常用符号面板。
-      symbol: { tap: { label: "符号", action: "command", value: "symbol", bubble: false } }
+      # 符：点赶往常用符号面板。
+      symbol: { width: 1, tap: { label: "符", action: "command", value: "symbol", bubble: false } }
+      # 逗号（ASCII 半角逗号，非顿号）：点按「，」，长按「！」。
+      comma: {
+        width: 0.8,
+        tap: { label: "，", value: "，", action: "commit" },
+        long_press: { label: "！", action: "commit", value: "！", bubble: false }
+      }
+      # 空格：点按空格，长按语音输入；宽度从内置 3 缩到 2.5 让出两侧标点键。
+      space: { width: 2.5, tap: { action: "space", bubble: false }, long_press: { label: "语音", action: "voice", bubble: false } }
+      # 句号：点按「。」，长按「？」。
+      period: {
+        width: 0.8,
+        tap: { label: "。", value: "。", action: "commit" },
+        long_press: { label: "？", action: "commit", value: "？", bubble: false }
+      }
+      # 全/半：中文态键面显示「全」，点按切到英文态；长按选择输入方案。
+      half_full: {
+        width: 0.8,
+        tap: { label: "全", action: "toggle_ascii", bubble: false },
+        long_press: { label: "方案", action: "command", value: "show_ime_picker", bubble: false }
+      }
 
   # ══════════════════════════════════════════════════════════
-  # 英文键盘段（qwerty_en）
-  # 与 qwerty 保持同一套键位与手势：罗马音布局不因中英切换而改变。
+  # 英文键盘段（qwerty_en）—— 半角字形
+  # 与 qwerty 同一套键位与手势，仅符号换成半角形式。
   # ══════════════════════════════════════════════════════════
   qwerty_en:
     button_layout: standard
@@ -136,71 +141,75 @@ keyboard:
         - [shift, z, x, c, v, b, n, m, delete]
         - [mode_change, symbol, comma, space, period, half_full, enter]
     keys:
-      # ── 第 1 行 数字行：点按数字，上滑上标，下滑下标，长按 emoji 数字 ──
-      "1": { tap: "1", swipe_up: "¹", swipe_down: "₁", long_press: { label: "1️⃣", action: "commit", value: "1️⃣", bubble: false } }
-      "2": { tap: "2", swipe_up: "²", swipe_down: "₂", long_press: { label: "2️⃣", action: "commit", value: "2️⃣", bubble: false } }
-      "3": { tap: "3", swipe_up: "³", swipe_down: "₃", long_press: { label: "3️⃣", action: "commit", value: "3️⃣", bubble: false } }
-      "4": { tap: "4", swipe_up: "⁴", swipe_down: "₄", long_press: { label: "4️⃣", action: "commit", value: "4️⃣", bubble: false } }
-      "5": { tap: "5", swipe_up: "⁵", swipe_down: "₅", long_press: { label: "5️⃣", action: "commit", value: "5️⃣", bubble: false } }
-      "6": { tap: "6", swipe_up: "⁶", swipe_down: "₆", long_press: { label: "6️⃣", action: "commit", value: "6️⃣", bubble: false } }
-      "7": { tap: "7", swipe_up: "⁷", swipe_down: "₇", long_press: { label: "7️⃣", action: "commit", value: "7️⃣", bubble: false } }
-      "8": { tap: "8", swipe_up: "⁸", swipe_down: "₈", long_press: { label: "8️⃣", action: "commit", value: "8️⃣", bubble: false } }
-      "9": { tap: "9", swipe_up: "⁹", swipe_down: "₉", long_press: { label: "9️⃣", action: "commit", value: "9️⃣", bubble: false } }
-      "0": { tap: "0", swipe_up: "⁰", swipe_down: "₀", long_press: { label: "0️⃣", action: "commit", value: "0️⃣", bubble: false } }
+      # ── 第 1 行 数字行：点按数字，长按「上标 / 下标」二选一 ──
+      "1": { tap: "1", long_press: { display: "bubble", values: ["¹", "₁"] } }
+      "2": { tap: "2", long_press: { display: "bubble", values: ["²", "₂"] } }
+      "3": { tap: "3", long_press: { display: "bubble", values: ["³", "₃"] } }
+      "4": { tap: "4", long_press: { display: "bubble", values: ["⁴", "₄"] } }
+      "5": { tap: "5", long_press: { display: "bubble", values: ["⁵", "₅"] } }
+      "6": { tap: "6", long_press: { display: "bubble", values: ["⁶", "₆"] } }
+      "7": { tap: "7", long_press: { display: "bubble", values: ["⁷", "₇"] } }
+      "8": { tap: "8", long_press: { display: "bubble", values: ["⁸", "₈"] } }
+      "9": { tap: "9", long_press: { display: "bubble", values: ["⁹", "₉"] } }
+      "0": { tap: "0", long_press: { display: "bubble", values: ["⁰", "₀"] } }
 
-      # ── 第 2 行：点按罗马字，上滑常用符号 / 功能，长按大写 ──
-      q: { tap: "q", swipe_up: { label: "Tab", action: "tab", display: "key", bubble: false }, long_press: { label: "Q", action: "commit", value: "Q", bubble: false } }
-      w: { tap: "w", swipe_up: "？", long_press: { label: "W", action: "commit", value: "W", bubble: false } }
-      e: { tap: "e", swipe_up: "！", long_press: { label: "E", action: "commit", value: "E", bubble: false } }
-      r: { tap: "r", swipe_up: "：", long_press: { label: "R", action: "commit", value: "R", bubble: false } }
-      t: { tap: "t", swipe_up: "；", long_press: { label: "T", action: "commit", value: "T", bubble: false } }
-      y: { tap: "y", swipe_up: { label: "恢复", action: "undo", display: "key", bubble: false }, long_press: { label: "Y", action: "commit", value: "Y", bubble: false } }
-      u: { tap: "u", swipe_up: "「", long_press: { label: "U", action: "commit", value: "U", bubble: false } }
-      i: { tap: "i", swipe_up: "」", long_press: { label: "I", action: "commit", value: "I", bubble: false } }
-      o: { tap: "o", swipe_up: "（", long_press: { label: "O", action: "commit", value: "O", bubble: false } }
-      p: { tap: "p", swipe_up: "）", long_press: { label: "P", action: "commit", value: "P", bubble: false } }
+      # ── 第 2 行：点按罗马音，长按符号 / 功能 ──
+      q: { tap: "q", long_press: { label: "Tab", action: "tab", bubble: false } }
+      w: { tap: "w", long_press: { label: "~", action: "commit", value: "~", bubble: false } }
+      e: { tap: "e", long_press: { label: "・", action: "commit", value: "・", bubble: false } }
+      r: { tap: "r", long_press: { display: "bubble", values: ["¥", "$"] } }
+      t: { tap: "t", long_press: { label: "%", action: "commit", value: "%", bubble: false } }
+      y: { tap: "y", long_press: { label: "恢复", action: "undo", bubble: false } }
+      u: { tap: "u", long_press: { label: "&", action: "commit", value: "&", bubble: false } }
+      i: { tap: "i", long_press: { label: "*", action: "commit", value: "*", bubble: false } }
+      o: { tap: "o", long_press: { label: "(", action: "commit", value: "(", bubble: false } }
+      p: { tap: "p", long_press: { label: ")", action: "commit", value: ")", bubble: false } }
 
-      # ── 第 3 行：点按罗马字，上滑常用符号 / 功能，长按大写 ──
-      a: { tap: "a", swipe_up: { label: "全选", action: "select_all", display: "key", bubble: false }, long_press: { label: "A", action: "commit", value: "A", bubble: false } }
-      s: { tap: "s", swipe_up: "〜", long_press: { label: "S", action: "commit", value: "S", bubble: false } }
-      d: { tap: "d", swipe_up: "・", long_press: { label: "D", action: "commit", value: "D", bubble: false } }
-      f: { tap: "f", swipe_up: "＠", long_press: { label: "F", action: "commit", value: "F", bubble: false } }
-      g: { tap: "g", swipe_up: "＃", long_press: { label: "G", action: "commit", value: "G", bubble: false } }
-      h: { tap: "h", swipe_up: "％", long_press: { label: "H", action: "commit", value: "H", bubble: false } }
-      j: { tap: "j", swipe_up: "＝", long_press: { label: "J", action: "commit", value: "J", bubble: false } }
-      k: { tap: "k", swipe_up: "＋", long_press: { label: "K", action: "commit", value: "K", bubble: false } }
-      l: { tap: "l", swipe_up: "￥", long_press: { label: "L", action: "commit", value: "L", bubble: false } }
-      "-": { tap: { label: "-", action: "send_rime", value: "-" }, swipe_up: "＿", long_press: { display: "bubble", values: ["-", "ー", "―", "－"] } }
+      # ── 第 3 行：点按罗马音，长按符号 / 功能 ──
+      a: { tap: "a", long_press: { label: "全选", action: "select_all", bubble: false } }
+      s: { tap: "s", long_press: { label: "@", action: "commit", value: "@", bubble: false } }
+      d: { tap: "d", long_press: { label: ":", action: "commit", value: ":", bubble: false } }
+      f: { tap: "f", long_press: { label: ";", action: "commit", value: ";", bubble: false } }
+      g: { tap: "g", long_press: { label: "[", action: "commit", value: "[", bubble: false } }
+      h: { tap: "h", long_press: { label: "]", action: "commit", value: "]", bubble: false } }
+      j: { tap: "j", long_press: { label: "+", action: "commit", value: "+", bubble: false } }
+      k: { tap: "k", long_press: { label: "=", action: "commit", value: "=", bubble: false } }
+      l: { tap: "l", long_press: { label: "#", action: "commit", value: "#", bubble: false } }
+      "-": { tap: { label: "-", action: "send_rime", value: "-" }, long_press: { label: "_", action: "commit", value: "_", bubble: false } }
 
-      # ── 第 4 行：点按罗马字，上滑常用符号 / 功能，长按大写 ──
-      z: { tap: "z", swipe_up: { label: "撤销", action: "undo", display: "key", bubble: false }, long_press: { label: "Z", action: "commit", value: "Z", bubble: false } }
-      x: { tap: "x", swipe_up: { label: "剪切", action: "cut", display: "key", bubble: false }, long_press: { label: "X", action: "commit", value: "X", bubble: false } }
-      c: { tap: "c", swipe_up: { label: "复制", action: "copy", display: "key", bubble: false }, long_press: { label: "C", action: "commit", value: "C", bubble: false } }
-      v: { tap: "v", swipe_up: { label: "粘贴", action: "paste", display: "key", bubble: false }, long_press: { label: "V", action: "commit", value: "V", bubble: false } }
-      b: { tap: "b", swipe_up: "＊", long_press: { label: "B", action: "commit", value: "B", bubble: false } }
-      n: { tap: "n", swipe_up: "＆", long_press: { label: "N", action: "commit", value: "N", bubble: false } }
-      m: { tap: "m", swipe_up: "…", long_press: { label: "M", action: "commit", value: "M", bubble: false } }
+      # ── 第 4 行：点按罗马音，长按符号 / 功能 ──
+      z: { tap: "z", long_press: { label: "撤销", action: "undo", bubble: false } }
+      x: { tap: "x", long_press: { label: "剪切", action: "cut", bubble: false } }
+      c: { tap: "c", long_press: { label: "复制", action: "copy", bubble: false } }
+      v: { tap: "v", long_press: { label: "粘贴", action: "paste", bubble: false } }
+      b: { tap: "b", long_press: { label: "/", action: "commit", value: "/", bubble: false } }
+      n: { tap: "n", long_press: { label: "\\", action: "commit", value: "\\", bubble: false } }
+      m: { tap: "m", long_press: { label: "...", action: "commit", value: "...", bubble: false } }
 
-      comma: {
-        tap: { label: "、", value: "、", action: "commit" },
-        swipe_up: { label: "。", value: "。", action: "commit" },
-        long_press: { label: "！", action: "commit", value: "！", bubble: false }
-      }
-      period: {
-        width: 0.8,
-        tap: { label: "。", value: "。", action: "commit" },
-        long_press: { label: "？", action: "commit", value: "？", bubble: false }
-      }
-      space: { width: 2.5, tap: { action: "space", bubble: false }, long_press: { label: "语音", action: "voice", bubble: false } }
-      half_full: {
-        tap: { label: "全/半", action: "toggle_ascii", bubble: false },
-        long_press: { label: "语言", action: "command", value: "show_ime_picker", bubble: false }
-      }
+      # ── 第 5 行 功能键 ──
       mode_change: {
-        tap: { action: "command", value: "mode_change", bubble: false },
+        width: 1.2,
+        tap: { label: "123", action: "command", value: "mode_change_number", bubble: false },
         long_press: { display: "bubble", values: [
           { label: "number", action: "command", value: "mode_change_number" },
           { label: "common_symbol", action: "command", value: "mode_change_common_symbol" }
         ] }
       }
-      symbol: { tap: { label: "符号", action: "command", value: "symbol", bubble: false } }
+      symbol: { width: 1, tap: { label: "符", action: "command", value: "symbol", bubble: false } }
+      comma: {
+        width: 0.8,
+        tap: { label: ",", value: ",", action: "commit" },
+        long_press: { label: "!", action: "commit", value: "!", bubble: false }
+      }
+      space: { width: 2.5, tap: { action: "space", bubble: false }, long_press: { label: "语音", action: "voice", bubble: false } }
+      period: {
+        width: 0.8,
+        tap: { label: ".", value: ".", action: "commit" },
+        long_press: { label: "?", action: "commit", value: "?", bubble: false }
+      }
+      # 全/半：英文态键面显示「半」，点按切回中文态；长按选择输入方案。
+      half_full: {
+        width: 0.8,
+        tap: { label: "半", action: "toggle_ascii", bubble: false },
+        long_press: { label: "方案", action: "command", value: "show_ime_picker", bubble: false }
+      }
