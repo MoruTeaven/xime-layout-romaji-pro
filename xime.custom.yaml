@@ -10,6 +10,8 @@
 #   长音键 - 点按 = 进 Rime（由方案决定转成 ー 还是别的），长按 = 下划线
 #   大小写   交给 Shift，不占字母键长按
 #
+# 编辑功能键位：q=Tab  a=全选  z=撤销  x=剪切  c=复制  v=粘贴
+#
 # 全角 / 半角：
 #   qwerty 段（中文态）写全角字形，qwerty_en 段（英文态）写半角字形。
 #   「全/半」键走 toggle_ascii 切换中英态，符号随之自动换成对应字形，
@@ -65,7 +67,7 @@ keyboard:
       e: { tap: "e", long_press: { label: "・", action: "commit", value: "・", bubble: false } }
       r: { tap: "r", long_press: { display: "bubble", values: ["￥", "＄"] } }
       t: { tap: "t", long_press: { label: "％", action: "commit", value: "％", bubble: false } }
-      y: { tap: "y", long_press: { label: "恢复", action: "undo", bubble: false } }
+      y: { tap: "y", long_press: { label: "＾", action: "commit", value: "＾", bubble: false } }
       u: { tap: "u", long_press: { label: "＆", action: "commit", value: "＆", bubble: false } }
       i: { tap: "i", long_press: { label: "＊", action: "commit", value: "＊", bubble: false } }
       o: { tap: "o", long_press: { label: "（", action: "commit", value: "（", bubble: false } }
@@ -161,7 +163,7 @@ keyboard:
       e: { tap: "e", long_press: { label: "・", action: "commit", value: "・", bubble: false } }
       r: { tap: "r", long_press: { display: "bubble", values: ["¥", "$"] } }
       t: { tap: "t", long_press: { label: "%", action: "commit", value: "%", bubble: false } }
-      y: { tap: "y", long_press: { label: "恢复", action: "undo", bubble: false } }
+      y: { tap: "y", long_press: { label: "^", action: "commit", value: "^", bubble: false } }
       u: { tap: "u", long_press: { label: "&", action: "commit", value: "&", bubble: false } }
       i: { tap: "i", long_press: { label: "*", action: "commit", value: "*", bubble: false } }
       o: { tap: "o", long_press: { label: "(", action: "commit", value: "(", bubble: false } }
